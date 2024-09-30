@@ -7,6 +7,8 @@ from tqdm import tqdm
 from joblib import Parallel, delayed
 from sklearn.model_selection import train_test_split
 
+import crosstalk_main
+
 def get_train_test_split() -> tuple[npt.NDArray[np.float64], npt.NDArray[np.int64], npt.NDArray[np.float64], npt.NDArray[np.int64], list[str]]:
     """
     This function performs the following steps:
@@ -31,7 +33,7 @@ def get_train_test_split() -> tuple[npt.NDArray[np.float64], npt.NDArray[np.int6
     for i in tqdm(IDs, desc='Loading files from disk'):
         raw_data[i] = pd.read_csv(f'{path}data/files/{i}.csv')
     
-    features = Parallel(n_jobs=16)(delayed(project1.generate_feature_vector)(df) for _, df in tqdm(raw_data.items(), desc='Generating feature vectors'))
+    features = Parallel(n_jobs=16)(delayed(crosstalk_main.generate_feature_vector)(df) for _, df in tqdm(raw_data.items(), desc='Generating feature vectors'))
     df_features = pd.DataFrame(features).sort_index(axis=1)
     feature_names = df_features.columns.tolist()
     X, y = df_features.values, df_labels['In-hospital_death'].values
