@@ -1,0 +1,4 @@
+variables:
+- ac_loc
+- pho_loc
+seed: 42
