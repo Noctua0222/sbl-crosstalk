@@ -42,10 +42,25 @@ def generate_feature_vector(df: pd.DataFrame) -> dict[str, float]:
     return feature_dict
 
 def impute_missing_values(X: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
-    return None
+    return X
 
 def normalize_feature_matrix(X: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
+    # Normalize scale of features
+    scaler = MinMaxScaler(feature_range=(0, 1)) # default is feature_range=(0, 1)
+    model = scaler.fit(X)
+
+    # The transform() method allows you to execute a function for each value of the DataFrame.
+    normalized_X = model.transform(X) 
+
+    return normalized_X
+
+def remove_unlabeled_data(df: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
     return None
+
+def binarize_values(y: npt.NDArray[np.float64]) -> npt.NDArray[np.float64]:
+    y = np.where(y >= 0 , np.ones_like(y), np.full_like(y, -1))
+
+    return y
 
 # main() =========================================================== #
 
